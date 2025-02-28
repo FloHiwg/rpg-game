@@ -7,6 +7,7 @@ class CombatSystem {
         this.attackCooldown = false;
         this.attackCooldownTime = 400; // ms
         this.attackRange = 50; // px
+        this.playerMoney = 0; // Starting money
         
         // Attack directions (relative to player position)
         this.attackOffsets = {
@@ -22,6 +23,7 @@ class CombatSystem {
         this.player = player;
         this.map = map;
         this.updatePlayerHealthDisplay();
+        this.updateMoneyDisplay();
         
         // Sword position needs the character::after element position to be updated
         this.updatePlayerSwordPosition('up');
@@ -32,6 +34,58 @@ class CombatSystem {
                 this.playerAttack();
             }
         });
+        
+        // Add coin click listener to the map for collecting coins
+        this.map.addEventListener('click', (e) => {
+            // Check if a coin was clicked
+            if (e.target.classList.contains('coin')) {
+                this.collectCoin(e.target);
+            }
+        });
+    }
+    
+    // Update money display
+    updateMoneyDisplay() {
+        // Update main money display
+        const moneyDisplay = document.getElementById('money-count');
+        if (moneyDisplay) {
+            moneyDisplay.textContent = this.playerMoney;
+        }
+        
+        // Update debug panel
+        const debugMoney = document.getElementById('debug-player-money');
+        if (debugMoney) {
+            debugMoney.textContent = this.playerMoney;
+        }
+    }
+    
+    // Add money to player
+    addMoney(amount) {
+        this.playerMoney += amount;
+        this.updateMoneyDisplay();
+        
+        // Show animation or feedback
+        console.log(`Added ${amount} gold. Total: ${this.playerMoney}`);
+    }
+    
+    // Collect a coin
+    collectCoin(coinElement) {
+        // Get coin value
+        const value = parseInt(coinElement.dataset.value) || 1;
+        
+        // Add value to player money
+        this.addMoney(value);
+        
+        // Play sound effect (would go here)
+        
+        // Remove coin with a fade out effect
+        coinElement.style.transition = 'all 0.3s ease-out';
+        coinElement.style.transform = 'scale(1.5)';
+        coinElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            coinElement.remove();
+        }, 300);
     }
     
     // Update player health display
@@ -201,6 +255,38 @@ class CombatSystem {
         mob.textContent = '†';
         
         console.log(`Killed ${mob.classList[2]}!`);
+        
+        // Drop money if mob has money value
+        if (mob.dataset.money) {
+            this.dropMoney(mob);
+        }
+    }
+    
+    // Drop money when mob is killed
+    dropMoney(mob) {
+        const moneyAmount = parseInt(mob.dataset.money);
+        
+        if (!moneyAmount) return;
+        
+        // Create a coin object
+        const mobX = parseInt(mob.style.left, 10);
+        const mobY = parseInt(mob.style.top, 10);
+        
+        // Add some randomization to drop position
+        const coinX = mobX + (Math.random() * 20 - 10);
+        const coinY = mobY + (Math.random() * 20 - 10);
+        
+        // Create coin element
+        const coin = document.createElement('div');
+        coin.className = 'coin';
+        coin.style.left = `${coinX}px`;
+        coin.style.top = `${coinY}px`;
+        coin.dataset.value = moneyAmount;
+        
+        // Add the coin to the map
+        this.map.appendChild(coin);
+        
+        console.log(`Dropped ${moneyAmount} gold from ${mob.classList[2]}`);
     }
     
     // Player takes damage

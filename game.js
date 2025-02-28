@@ -32,7 +32,7 @@ async function initGame() {
     window.combatSystem.init(player, map);
     
     // Movement speed
-    const speed = 5;
+    const speed = 2;
     
     // Keys pressed state
     const keys = {
@@ -120,37 +120,6 @@ async function initGame() {
     window.addEventListener('keyup', (e) => {
         if (keys.hasOwnProperty(e.key)) {
             keys[e.key] = false;
-        }
-    });
-    
-    // Debugging click handler - allows clicking to move player
-    map.addEventListener('click', (e) => {
-        // Get click position relative to the map
-        const rect = map.getBoundingClientRect();
-        const clickX = e.clientX - rect.left + (map.offsetWidth / 2 - viewport.offsetWidth / 2);
-        const clickY = e.clientY - rect.top + (map.offsetHeight / 2 - viewport.offsetHeight / 2);
-        
-        console.log("Clicked at map position:", clickX, clickY);
-        
-        // Check if there's no collision at the clicked position
-        if (!checkCollision(clickX, clickY)) {
-            playerX = clickX;
-            playerY = clickY;
-            
-            // Update player's absolute position on the map
-            player.style.left = `${playerX}px`;
-            player.style.top = `${playerY}px`;
-            
-            // Update debug panel
-            document.getElementById('debug-player-pos').textContent = `${Math.round(playerX)},${Math.round(playerY)}`;
-            
-            // Update direction
-            const dirX = clickX - playerX;
-            const dirY = clickY - playerY;
-            updatePlayerDirection(dirX, dirY);
-            
-            // Update map position to center the viewport on the player
-            updateMapPosition();
         }
     });
     

@@ -85,6 +85,7 @@ class MapLoader {
                         "maxHealth": 10,
                         "damage": 0,
                         "speed": 1,
+                        "money": 5,
                         "id": "mob-1"
                     },
                     {
@@ -99,6 +100,7 @@ class MapLoader {
                         "maxHealth": 20,
                         "damage": 2,
                         "speed": 2,
+                        "money": 10,
                         "id": "mob-2"
                     },
                     {
@@ -113,6 +115,7 @@ class MapLoader {
                         "maxHealth": 40,
                         "damage": 5,
                         "speed": 1.5,
+                        "money": 25,
                         "id": "mob-3"
                     },
                     {
@@ -127,6 +130,7 @@ class MapLoader {
                         "maxHealth": 30,
                         "damage": 4,
                         "speed": 3,
+                        "money": 20,
                         "id": "mob-4"
                     },
                     {
@@ -141,6 +145,7 @@ class MapLoader {
                         "maxHealth": 25,
                         "damage": 0,
                         "speed": 4,
+                        "money": 15,
                         "id": "mob-5"
                     }
                 ]
@@ -249,6 +254,11 @@ class MapLoader {
                 element.dataset.damage = obj.damage;
                 element.dataset.speed = obj.speed;
                 
+                // Store money value for when mob is killed
+                if (obj.money) {
+                    element.dataset.money = obj.money;
+                }
+                
                 // Set the health bar
                 element.style.setProperty('--health-percent', `${(obj.health / obj.maxHealth) * 100}%`);
                 element.style.setProperty('--health-color', '#27AE60');
@@ -258,6 +268,13 @@ class MapLoader {
                 
                 // Show mob type as text
                 element.textContent = obj.subtype.charAt(0).toUpperCase();
+                break;
+                
+            case 'coin':
+                // Create a coin element
+                element.classList.add('coin');
+                // Store the value of the coin
+                element.dataset.value = obj.value || 1;
                 break;
         }
         

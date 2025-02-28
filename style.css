@@ -220,6 +220,52 @@ body {
     100% { background-color: inherit; }
 }
 
+/* Coin/Money */
+.coin {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #FFD700;
+    border: 2px solid #DAA520;
+    border-radius: 50%;
+    z-index: 8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #B8860B;
+    text-shadow: 0 0 2px white;
+    animation: coin-spawn 0.5s ease-out, coin-glow 2s infinite;
+    transition: transform 0.2s ease-out;
+    cursor: pointer;
+}
+
+.coin:hover {
+    transform: scale(1.2);
+}
+
+.coin::before {
+    content: '$';
+}
+
+@keyframes coin-spawn {
+    0% {
+        transform: scale(0.2) translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes coin-glow {
+    0% { box-shadow: 0 0 5px gold; }
+    50% { box-shadow: 0 0 15px gold; }
+    100% { box-shadow: 0 0 5px gold; }
+}
+
 /* Sword attack effect */
 .attack-area {
     position: absolute;
