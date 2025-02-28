@@ -29,7 +29,8 @@ body {
 .map {
     position: absolute;
     background-color: #7caa2d;
-    transform-origin: 0 0;
+    background: url('assets/grass_big_tile.png') repeat;
+    background-size: 16px;
 }
 
 .character {
