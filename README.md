@@ -1,70 +1,65 @@
-# 2D Top-Down RPG Game
+# 2D RPG Game
 
-A simple 2D top-down RPG game built with HTML, CSS, and JavaScript.
+A 2D top-down RPG game built with TypeScript.
 
-## How to Play
+## Game Features
 
-1. Open `index.html` in your browser
-2. Control the character using arrow keys or WASD
-3. Explore the map with various buildings, trees, stones, and paths
+- Top-down character movement
+- Dynamic map loading from JSON
+- Combat system with sword attacks
+- Multiple mob types (rabbit, fox, boar, wolf, deer)
+- Health system for player and mobs
+- Money system with coins dropped by defeated mobs
 
-## Features
+## Technologies Used
 
-- Character movement in all directions
-- Scrollable map with dynamic map loading from JSON
-- Various map objects: buildings, trees, stones, grass patches, paths
-- Collision detection for solid objects
-- CSS-based map with stylized objects
+- TypeScript
+- Webpack
+- HTML5 & CSS3
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+### Development
+
+Run the development server:
+```
+npm run dev
+```
+
+The game will be available at http://localhost:9000.
+
+### Building for Production
+
+Build the project:
+```
+npm run build
+```
+
+The build files will be located in the `dist` directory.
 
 ## Controls
 
-- Up: Arrow Up or W
-- Down: Arrow Down or S
-- Left: Arrow Left or A
-- Right: Arrow Right or D
+- Movement: Arrow keys or WASD
+- Attack: Space bar
+- Debug panel: Shows player position, direction, health, and money
+- Collect coins: Walk over them or click on them
 
-## Map Objects
+## Game Structure
 
-The map is defined in `map.json` and contains:
-- Buildings (houses, shop, inn, blacksmith)
-- Trees (solid, can't walk through)
-- Stones (solid obstacles)
-- Grass patches (decorative, can walk through)
-- Paths (decorative walkways)
-
-## Customizing the Map
-
-You can edit the `map.json` file to:
-- Add or remove map objects
-- Change object positions, sizes, and colors
-- Define which objects have collision
-- Set the map size and starting position
-- Create new map layouts
-
-## Development
-
-### Setup
-```
-npm install
-```
-
-### Running the Game
-```
-npm start
-```
-This will start a local server to run the game.
-
-### Running Tests
-```
-npm test
-```
-
-For continuous testing during development:
-```
-npm run test:watch
-```
-
-For coverage report:
-```
-npm run test:coverage
-```
+- `src/index.ts` - Entry point
+- `src/components/` - Game components and systems
+- `src/types/` - TypeScript interfaces and types
+- `src/map.json` - Map configuration and objects

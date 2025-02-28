@@ -1,0 +1,234 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #222;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.viewport {
+    width: 800px;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid #333;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.map {
+    position: absolute;
+    background-color: #7caa2d;
+    transform-origin: 0 0;
+}
+
+.character {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #3498db;
+    border: 2px solid #2980b9;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.map-object {
+    position: absolute;
+    border: 1px solid transparent;
+}
+
+.map-object.building {
+    background-color: #8B4513;
+    border: 2px solid #5D2906;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.map-object.building.with-roof::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 20px;
+    background-color: #A52A2A;
+    top: -20px;
+    left: -10%;
+    border-radius: 5px 5px 0 0;
+    z-index: 1;
+}
+
+.map-object.building.shop {
+    background-color: #6A5ACD;
+    border: 2px solid #483D8B;
+}
+
+.map-object.building.shop::before {
+    background-color: #9370DB;
+}
+
+.map-object.path {
+    background-color: #D2B48C;
+    border: none;
+    z-index: -1;
+}
+
+.map-object.tree {
+    background-color: #228B22;
+    border-radius: 50%;
+    border: 2px solid #006400;
+}
+
+/* Sword attack effect */
+.sword-attack {
+    position: absolute;
+    background-color: rgba(211, 211, 211, 0.7);
+    border: 2px solid white;
+    z-index: 5;
+    animation: swing 0.3s ease-out forwards;
+}
+
+@keyframes swing {
+    0% {
+        transform: scale(0.2);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.1);
+        opacity: 0;
+    }
+}
+
+/* Health bar */
+.health-bar {
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    background-color: #e74c3c;
+    top: -10px;
+    left: 0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    height: 100%;
+    width: 100%;
+    background-color: #27AE60;
+    transform-origin: left center;
+}
+
+/* Mobs */
+.map-object.mob {
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    position: relative;
+}
+
+.map-object.mob.rabbit {
+    background-color: #A9A9A9;
+    border: 2px solid #808080;
+}
+
+.map-object.mob.fox {
+    background-color: #D2691E;
+    border: 2px solid #8B4513;
+}
+
+.map-object.mob.boar {
+    background-color: #5D4037;
+    border: 2px solid #3E2723;
+}
+
+.map-object.mob.wolf {
+    background-color: #607D8B;
+    border: 2px solid #455A64;
+}
+
+.map-object.mob.deer {
+    background-color: #8D6E63;
+    border: 2px solid #5D4037;
+}
+
+/* Mob health bar using pseudo-element */
+.map-object.mob::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #e74c3c;
+    border-radius: 2px;
+    transform-origin: left center;
+}
+
+.map-object.mob::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    transform: scaleX(var(--health-scale, 1));
+    background-color: var(--health-color, #27AE60);
+    border-radius: 2px;
+    transform-origin: left center;
+}
+
+/* Damage effect for mobs */
+.map-object.mob.damage {
+    animation: damage-flash 0.3s ease-out;
+}
+
+@keyframes damage-flash {
+    0%, 100% {
+        filter: brightness(100%);
+    }
+    50% {
+        filter: brightness(200%) saturate(200%);
+    }
+}
+
+/* Dead mob effect */
+.map-object.mob.dead {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transform: rotate(180deg);
+    transition: all 0.5s ease-out;
+}
+
+/* Coin styling */
+.map-object.coin {
+    width: 15px !important;
+    height: 15px !important;
+    background-color: gold;
+    border-radius: 50%;
+    border: 1px solid #B8860B;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
+    animation: coin-pulse 1s ease-in-out infinite alternate;
+    z-index: 4;
+}
+
+@keyframes coin-pulse {
+    from {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
+    }
+    to {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.9);
+    }
+}

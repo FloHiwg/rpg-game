@@ -1,0 +1,140 @@
+{
+    "mapWidth": 1500,
+    "mapHeight": 1500,
+    "tileSize": 50,
+    "background": "#7caa2d",
+    "startPosition": {
+        "x": 750,
+        "y": 750
+    },
+    "objects": [
+        {
+            "type": "building",
+            "subtype": "house",
+            "x": 300,
+            "y": 500,
+            "width": 100,
+            "height": 80,
+            "collision": true,
+            "color": "#8B4513",
+            "borderColor": "#5D2906",
+            "roofColor": "#A52A2A"
+        },
+        {
+            "type": "building",
+            "subtype": "house",
+            "x": 1000,
+            "y": 800,
+            "width": 120,
+            "height": 90,
+            "collision": true,
+            "color": "#8B4513",
+            "borderColor": "#5D2906",
+            "roofColor": "#A52A2A"
+        },
+        {
+            "type": "building",
+            "subtype": "shop",
+            "x": 600,
+            "y": 400,
+            "width": 140,
+            "height": 100,
+            "collision": true,
+            "color": "#6A5ACD",
+            "borderColor": "#483D8B",
+            "roofColor": "#9370DB"
+        },
+        {
+            "type": "path",
+            "x": 750,
+            "y": 750,
+            "width": 500,
+            "height": 50,
+            "collision": false,
+            "color": "#D2B48C"
+        },
+        {
+            "type": "tree",
+            "x": 200,
+            "y": 200,
+            "width": 60,
+            "height": 60,
+            "collision": true
+        },
+        {
+            "type": "mob",
+            "subtype": "rabbit",
+            "x": 850,
+            "y": 650,
+            "width": 30,
+            "height": 30,
+            "collision": true,
+            "health": 10,
+            "maxHealth": 10,
+            "damage": 0,
+            "speed": 1,
+            "money": 5,
+            "id": "mob-1"
+        },
+        {
+            "type": "mob",
+            "subtype": "fox",
+            "x": 500,
+            "y": 900,
+            "width": 35,
+            "height": 35,
+            "collision": true,
+            "health": 20,
+            "maxHealth": 20,
+            "damage": 2,
+            "speed": 2,
+            "money": 10,
+            "id": "mob-2"
+        },
+        {
+            "type": "mob",
+            "subtype": "boar",
+            "x": 1100,
+            "y": 600,
+            "width": 45,
+            "height": 45,
+            "collision": true,
+            "health": 40,
+            "maxHealth": 40,
+            "damage": 5,
+            "speed": 1.5,
+            "money": 25,
+            "id": "mob-3"
+        },
+        {
+            "type": "mob",
+            "subtype": "wolf",
+            "x": 400,
+            "y": 650,
+            "width": 40,
+            "height": 40,
+            "collision": true,
+            "health": 30,
+            "maxHealth": 30,
+            "damage": 4,
+            "speed": 3,
+            "money": 20,
+            "id": "mob-4"
+        },
+        {
+            "type": "mob",
+            "subtype": "deer",
+            "x": 900,
+            "y": 400,
+            "width": 40,
+            "height": 45,
+            "collision": true,
+            "health": 25,
+            "maxHealth": 25,
+            "damage": 0,
+            "speed": 4,
+            "money": 15,
+            "id": "mob-5"
+        }
+    ]
+}
