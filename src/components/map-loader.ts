@@ -180,6 +180,67 @@ export class MapLoader {
           element.dataset.value = obj.value.toString();
         }
         break;
+        
+      case 'spawnpoint':
+        // Create a spawn point element
+        element.classList.add('spawnpoint');
+        
+        // Store spawn point data
+        if ('mobType' in obj) {
+          element.dataset.mobType = obj.mobType ? obj.mobType.toString() : 'random';
+        } else {
+          element.dataset.mobType = 'random';
+        }
+        
+        if ('radius' in obj) {
+          element.dataset.radius = obj.radius.toString();
+          
+          // Add a visual indication of radius
+          const radiusIndicator = document.createElement('div');
+          radiusIndicator.className = 'radius-indicator';
+          radiusIndicator.style.width = `${obj.radius * 2}px`;
+          radiusIndicator.style.height = `${obj.radius * 2}px`;
+          radiusIndicator.style.borderRadius = '50%';
+          radiusIndicator.style.position = 'absolute';
+          radiusIndicator.style.left = `${obj.width / 2 - obj.radius}px`;
+          radiusIndicator.style.top = `${obj.height / 2 - obj.radius}px`;
+          radiusIndicator.style.backgroundColor = 'rgba(255, 165, 0, 0.1)';
+          radiusIndicator.style.border = '1px dashed orange';
+          radiusIndicator.style.zIndex = '-1';
+          element.appendChild(radiusIndicator);
+        }
+        
+        if ('maxMobs' in obj) {
+          element.dataset.maxMobs = obj.maxMobs?.toString();
+        }
+        
+        if ('respawnTime' in obj) {
+          element.dataset.respawnTime = obj.respawnTime.toString();
+        }
+        
+        // Add spawn point icon
+        element.innerHTML += `<div class="spawn-icon"></div>`;
+        
+        // Add label for spawn point
+        const label = document.createElement('div');
+        label.className = 'spawn-label';
+        if (obj.mobType) {
+          label.textContent = `${obj.mobType} (max: ${obj.maxMobs})`;
+        } else {
+          label.textContent = `Random (max: ${obj.maxMobs})`;
+        }
+        label.style.position = 'absolute';
+        label.style.bottom = `${obj.height + 5}px`;
+        label.style.left = '50%';
+        label.style.transform = 'translateX(-50%)';
+        label.style.whiteSpace = 'nowrap';
+        label.style.color = 'white';
+        label.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        label.style.padding = '2px 5px';
+        label.style.borderRadius = '3px';
+        label.style.fontSize = '12px';
+        element.appendChild(label);
+        break;
     }
     
     mapElement.appendChild(element);
@@ -211,5 +272,9 @@ export class MapLoader {
     return this.mapData ? 
       { width: this.mapData.mapWidth, height: this.mapData.mapHeight } : 
       { width: 0, height: 0 };
+  }
+  
+  public getMapData(): MapData | null {
+    return this.mapData;
   }
 }

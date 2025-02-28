@@ -21,6 +21,8 @@ export interface GameObject {
   id?: string;
   type: string;
   subtype?: string;
+  mobType?: string | null;
+  maxMobs?: number;
   x: number;
   y: number;
   width: number;
@@ -47,7 +49,14 @@ export interface Coin extends GameObject {
   value: number;
 }
 
-export type MapObject = GameObject | Building | Mob | Coin;
+export interface SpawnPoint extends GameObject {
+  mobType: MobType | null;
+  radius: number;
+  maxMobs: number;
+  respawnTime: number;
+}
+
+export type MapObject = GameObject | Building | Mob | Coin | SpawnPoint;
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -96,7 +105,7 @@ export interface PlayerState {
 
 // Map Builder Types
 export type EditorMode = 'select' | 'add' | 'delete' | 'move';
-export type ObjectType = 'building' | 'path' | 'tree' | 'mob' | 'coin';
+export type ObjectType = 'building' | 'path' | 'tree' | 'mob' | 'coin' | 'spawnpoint';
 export type BuildingType = 'house' | 'shop';
 
 export interface Shop {
@@ -123,6 +132,10 @@ export interface ObjectTemplate {
   speed?: number;
   money?: number;
   value?: number;
+  mobType?: MobType | null;
+  radius?: number;
+  maxMobs?: number;
+  respawnTime?: number;
 }
 
 export interface MapSettings {

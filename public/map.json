@@ -149,6 +149,45 @@
             "speed": 4,
             "money": 15,
             "id": "mob-5"
+        },
+        {
+            "type": "spawnpoint",
+            "x": 400,
+            "y": 400,
+            "width": 40,
+            "height": 40,
+            "collision": false,
+            "mobType": "rabbit",
+            "radius": 150,
+            "maxMobs": 5,
+            "respawnTime": 10000,
+            "id": "spawn-rabbits"
+        },
+        {
+            "type": "spawnpoint",
+            "x": 1200,
+            "y": 300,
+            "width": 40,
+            "height": 40,
+            "collision": false,
+            "mobType": "fox",
+            "radius": 200,
+            "maxMobs": 3,
+            "respawnTime": 15000,
+            "id": "spawn-foxes"
+        },
+        {
+            "type": "spawnpoint",
+            "x": 1000,
+            "y": 1000,
+            "width": 40,
+            "height": 40,
+            "collision": false,
+            "mobType": null,
+            "radius": 250,
+            "maxMobs": 8,
+            "respawnTime": 20000,
+            "id": "spawn-random"
         }
     ]
 }

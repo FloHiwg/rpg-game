@@ -2,6 +2,7 @@ import './styles.css';
 import { MapLoader } from './components/map-loader';
 import { CombatSystem } from './components/combat-system';
 import { InventorySystem } from './components/inventory-system';
+import { MobSpawner } from './components/mob-spawner';
 import { GameEngine } from './components/game-engine';
 import { MapBuilder } from './components/map-builder';
 
@@ -9,7 +10,8 @@ import { MapBuilder } from './components/map-builder';
 const mapLoader = new MapLoader();
 const combatSystem = new CombatSystem();
 const inventorySystem = new InventorySystem();
-const gameEngine = new GameEngine(mapLoader, combatSystem, inventorySystem);
+const mobSpawner = new MobSpawner();
+const gameEngine = new GameEngine(mapLoader, combatSystem, inventorySystem, mobSpawner);
 const mapBuilder = new MapBuilder();
 
 // Wait for DOM to be fully loaded
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     mapLoader,
     combatSystem,
     inventorySystem,
+    mobSpawner,
     gameEngine,
     mapBuilder
   };

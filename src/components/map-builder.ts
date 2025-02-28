@@ -151,6 +151,36 @@ export class MapBuilder {
         height: 15,
         collision: false,
         value: 10
+      },
+      'spawnpoint-rabbit': {
+        type: 'spawnpoint',
+        width: 40,
+        height: 40,
+        collision: false,
+        mobType: 'rabbit',
+        radius: 150,
+        maxMobs: 5,
+        respawnTime: 10000
+      },
+      'spawnpoint-fox': {
+        type: 'spawnpoint',
+        width: 40,
+        height: 40,
+        collision: false,
+        mobType: 'fox',
+        radius: 200,
+        maxMobs: 3,
+        respawnTime: 15000
+      },
+      'spawnpoint-random': {
+        type: 'spawnpoint',
+        width: 40,
+        height: 40,
+        collision: false,
+        mobType: null,
+        radius: 250,
+        maxMobs: 8,
+        respawnTime: 20000
       }
     };
   }
@@ -207,6 +237,7 @@ export class MapBuilder {
           <option value="tree">Tree</option>
           <option value="mob">Mob</option>
           <option value="coin">Coin</option>
+          <option value="spawnpoint">Spawn Point</option>
         </select>
         
         <div id="subtype-container" class="subtype-container">
@@ -630,6 +661,17 @@ export class MapBuilder {
         case 'building':
           buildingSubtypeContainer.style.display = 'block';
           this.editorState.selectedSubtype = (buildingSubtypeContainer as HTMLSelectElement).value as BuildingType;
+          break;
+        case 'spawnpoint':
+          mobSubtypeContainer.style.display = 'block';
+          // Add a "random" option for spawn points if it doesn't exist
+          if (!mobSubtypeContainer.querySelector('option[value="random"]')) {
+            const randomOption = document.createElement('option');
+            randomOption.value = 'random';
+            randomOption.textContent = 'Random';
+            mobSubtypeContainer.appendChild(randomOption);
+          }
+          this.editorState.selectedSubtype = (mobSubtypeContainer as HTMLSelectElement).value as MobType;
           break;
         case 'mob':
           mobSubtypeContainer.style.display = 'block';
@@ -1071,6 +1113,35 @@ export class MapBuilder {
           </div>
         </div>
       `;
+    } else if (obj.type === 'spawnpoint') {
+      html += `
+        <div class="properties-group">
+          <h4>Spawn Point Properties</h4>
+          <div class="property-row">
+            <label>Mob Type:</label>
+            <select id="prop-spawn-type">
+              <option value="random" ${(obj as any).mobType === null ? 'selected' : ''}>Random</option>
+              <option value="rabbit" ${(obj as any).mobType === 'rabbit' ? 'selected' : ''}>Rabbit</option>
+              <option value="fox" ${(obj as any).mobType === 'fox' ? 'selected' : ''}>Fox</option>
+              <option value="boar" ${(obj as any).mobType === 'boar' ? 'selected' : ''}>Boar</option>
+              <option value="wolf" ${(obj as any).mobType === 'wolf' ? 'selected' : ''}>Wolf</option>
+              <option value="deer" ${(obj as any).mobType === 'deer' ? 'selected' : ''}>Deer</option>
+            </select>
+          </div>
+          <div class="property-row">
+            <label>Radius:</label>
+            <input type="number" id="prop-radius" value="${'radius' in obj ? obj.radius : 150}">
+          </div>
+          <div class="property-row">
+            <label>Max Mobs:</label>
+            <input type="number" id="prop-max-mobs" value="${'maxMobs' in obj ? obj.maxMobs : 5}">
+          </div>
+          <div class="property-row">
+            <label>Respawn Time (ms):</label>
+            <input type="number" id="prop-respawn-time" value="${'respawnTime' in obj ? obj.respawnTime : 10000}" step="1000">
+          </div>
+        </div>
+      `;
     }
     
     // Action buttons
@@ -1165,6 +1236,24 @@ export class MapBuilder {
       
       if (valueInput && 'value' in obj) {
         obj.value = parseInt(valueInput.value);
+      }
+    } else if (obj.type === 'spawnpoint') {
+      const spawnTypeSelect = document.getElementById('prop-spawn-type') as HTMLSelectElement;
+      const radiusInput = document.getElementById('prop-radius') as HTMLInputElement;
+      const maxMobsInput = document.getElementById('prop-max-mobs') as HTMLInputElement;
+      const respawnTimeInput = document.getElementById('prop-respawn-time') as HTMLInputElement;
+      
+      if (spawnTypeSelect && radiusInput && maxMobsInput && respawnTimeInput) {
+        const spawnType = spawnTypeSelect.value;
+        if (spawnType === 'random') {
+          (obj as any).mobType = null;
+        } else {
+          (obj as any).mobType = spawnType as MobType;
+        }
+        
+        (obj as any).radius = parseInt(radiusInput.value);
+        (obj as any).maxMobs = parseInt(maxMobsInput.value);
+        (obj as any).respawnTime = parseInt(respawnTimeInput.value);
       }
     }
     
@@ -1284,6 +1373,84 @@ export class MapBuilder {
         break;
       case 'coin':
         element.innerHTML = '$';
+        break;
+      case 'spawnpoint':
+        // Create spawn point diamond shape
+        const spawnIcon = document.createElement('div');
+        spawnIcon.className = 'spawn-icon';
+        element.appendChild(spawnIcon);
+        
+        // Add radius indicator
+        if ('radius' in obj) {
+          const radiusIndicator = document.createElement('div');
+          radiusIndicator.className = 'radius-indicator';
+          radiusIndicator.style.width = `${(obj as any).radius * 2}px`;
+          radiusIndicator.style.height = `${(obj as any).radius * 2}px`;
+          radiusIndicator.style.left = `${obj.width / 2 - (obj as any).radius}px`;
+          radiusIndicator.style.top = `${obj.height / 2 - (obj as any).radius}px`;
+          element.appendChild(radiusIndicator);
+        }
+        
+        // Add label
+        const label = document.createElement('div');
+        label.className = 'spawn-label';
+        label.style.position = 'absolute';
+        label.style.bottom = `${obj.height + 5}px`;
+        label.style.left = '50%';
+        label.style.transform = 'translateX(-50%)';
+        label.style.whiteSpace = 'nowrap';
+        label.style.fontSize = '10px';
+        label.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        label.style.color = 'white';
+        label.style.padding = '2px 5px';
+        label.style.borderRadius = '2px';
+        
+        if ((obj as any).mobType) {
+          label.textContent = `${(obj as any).mobType} (${(obj as any).maxMobs})`;
+        } else {
+          label.textContent = `Random (${(obj as any).maxMobs})`;
+        }
+        
+        element.appendChild(label);
+        break;
+      case 'spawnpoint':
+        // Create spawn point diamond shape
+        const spawnIconElement = document.createElement('div');
+        spawnIconElement.className = 'spawn-icon';
+        element.appendChild(spawnIconElement);
+        
+        // Add radius indicator
+        if ('radius' in obj) {
+          const radiusIndicator = document.createElement('div');
+          radiusIndicator.className = 'radius-indicator';
+          radiusIndicator.style.width = `${(obj as any).radius * 2}px`;
+          radiusIndicator.style.height = `${(obj as any).radius * 2}px`;
+          radiusIndicator.style.left = `${obj.width / 2 - (obj as any).radius}px`;
+          radiusIndicator.style.top = `${obj.height / 2 - (obj as any).radius}px`;
+          element.appendChild(radiusIndicator);
+        }
+        
+        // Add label
+        const spawnLabel = document.createElement('div');
+        spawnLabel.className = 'spawn-label';
+        spawnLabel.style.position = 'absolute';
+        spawnLabel.style.bottom = `${obj.height + 5}px`;
+        spawnLabel.style.left = '50%';
+        spawnLabel.style.transform = 'translateX(-50%)';
+        spawnLabel.style.whiteSpace = 'nowrap';
+        spawnLabel.style.fontSize = '10px';
+        spawnLabel.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        spawnLabel.style.color = 'white';
+        spawnLabel.style.padding = '2px 5px';
+        spawnLabel.style.borderRadius = '2px';
+        
+        if ((obj as any).mobType) {
+          spawnLabel.textContent = `${(obj as any).mobType} (${(obj as any).maxMobs})`;
+        } else {
+          spawnLabel.textContent = `Random (${(obj as any).maxMobs})`;
+        }
+        
+        element.appendChild(spawnLabel);
         break;
     }
     

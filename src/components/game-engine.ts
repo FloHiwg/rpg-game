@@ -1,7 +1,8 @@
-import { Dimensions, PlayerState, MapData } from '../types/game-types';
+import { Dimensions, PlayerState, MapData, SpawnPoint as SpawnPointType } from '../types/game-types';
 import { MapLoader } from './map-loader';
 import { CombatSystem } from './combat-system';
 import { InventorySystem } from './inventory-system';
+import { MobSpawner, SpawnPoint } from './mob-spawner';
 
 export class GameEngine {
   private player: HTMLElement | null = null;
@@ -12,6 +13,7 @@ export class GameEngine {
   private mapLoader: MapLoader;
   private combatSystem: CombatSystem;
   private inventorySystem: InventorySystem;
+  private mobSpawner: MobSpawner;
   
   private playerState: PlayerState = {
     x: 750,
@@ -46,15 +48,19 @@ export class GameEngine {
   
   private animationFrameId: number | null = null;
 
-  constructor(mapLoader: MapLoader, combatSystem: CombatSystem, inventorySystem: InventorySystem) {
+  constructor(mapLoader: MapLoader, combatSystem: CombatSystem, inventorySystem: InventorySystem, mobSpawner: MobSpawner) {
     this.mapLoader = mapLoader;
     this.combatSystem = combatSystem;
     this.inventorySystem = inventorySystem;
+    this.mobSpawner = mobSpawner;
   }
   
   public loadMapData(mapData: MapData): void {
     // Stop any existing game loop
     this.stopGameLoop();
+    
+    // Clear existing mobs from spawn points
+    this.mobSpawner.clearAllMobs();
     
     // Reset the loader with the new map data
     this.mapLoader.setMapData(mapData);
@@ -83,6 +89,9 @@ export class GameEngine {
     
     // Update map position
     this.updateMapPosition();
+    
+    // Setup spawn points from the map data
+    this.setupSpawnPoints();
     
     // Restart game loop
     this.startGameLoop();
@@ -122,6 +131,12 @@ export class GameEngine {
     
     // Initialize inventory system
     this.inventorySystem.init(this.playerState);
+    
+    // Initialize mob spawner
+    if (this.map) {
+      this.mobSpawner.init(this.map);
+      this.setupSpawnPoints();
+    }
     
     // Set up event listeners
     this.setupEventListeners();
@@ -370,5 +385,33 @@ export class GameEngine {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
+  }
+  
+  private setupSpawnPoints(): void {
+    if (!this.map) return;
+    
+    // Find all spawn point objects in the map data
+    const mapData = this.mapLoader.getMapData();
+    if (!mapData) return;
+    
+    // Clear existing spawn points
+    this.mobSpawner.clearAllMobs();
+    
+    // Add spawn points from map data
+    mapData.objects.forEach(obj => {
+      if (obj.type === 'spawnpoint' && obj.id) {
+        const spawnPoint: Omit<SpawnPoint, 'lastSpawnTime' | 'spawnedMobs'> = {
+          id: obj.id,
+          position: { x: obj.x, y: obj.y },
+          mobType: (obj as SpawnPointType).mobType,
+          radius: (obj as SpawnPointType).radius || 100,
+          maxMobs: (obj as SpawnPointType).maxMobs || 5,
+          respawnTime: (obj as SpawnPointType).respawnTime || 5000,
+          active: true
+        };
+        
+        this.mobSpawner.addSpawnPoint(spawnPoint);
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Direction, PlayerState, Item } from '../types/game-types';
+import { Direction, PlayerState } from '../types/game-types';
 
 export class CombatSystem {
   private player: HTMLElement | null = null;

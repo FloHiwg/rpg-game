@@ -225,6 +225,37 @@ body {
     z-index: 4;
 }
 
+/* Spawn Point Styling */
+.map-object.spawnpoint {
+    background-color: transparent;
+    border: 2px dashed orange;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spawn-icon {
+    width: 70%;
+    height: 70%;
+    background-color: orange;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.radius-indicator {
+    pointer-events: none;
+}
+
 @keyframes coin-pulse {
     from {
         transform: scale(1);
