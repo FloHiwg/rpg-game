@@ -71,6 +71,77 @@ class MapLoader {
                         "width": 60,
                         "height": 60,
                         "collision": true
+                    },
+                    // Add animals (mobs)
+                    {
+                        "type": "mob",
+                        "subtype": "rabbit",
+                        "x": 850,
+                        "y": 650,
+                        "width": 30,
+                        "height": 30,
+                        "collision": true,
+                        "health": 10,
+                        "maxHealth": 10,
+                        "damage": 0,
+                        "speed": 1,
+                        "id": "mob-1"
+                    },
+                    {
+                        "type": "mob",
+                        "subtype": "fox",
+                        "x": 500,
+                        "y": 900,
+                        "width": 35,
+                        "height": 35,
+                        "collision": true,
+                        "health": 20,
+                        "maxHealth": 20,
+                        "damage": 2,
+                        "speed": 2,
+                        "id": "mob-2"
+                    },
+                    {
+                        "type": "mob",
+                        "subtype": "boar",
+                        "x": 1100,
+                        "y": 600,
+                        "width": 45,
+                        "height": 45,
+                        "collision": true,
+                        "health": 40,
+                        "maxHealth": 40,
+                        "damage": 5,
+                        "speed": 1.5,
+                        "id": "mob-3"
+                    },
+                    {
+                        "type": "mob",
+                        "subtype": "wolf",
+                        "x": 400,
+                        "y": 650,
+                        "width": 40,
+                        "height": 40,
+                        "collision": true,
+                        "health": 30,
+                        "maxHealth": 30,
+                        "damage": 4,
+                        "speed": 3,
+                        "id": "mob-4"
+                    },
+                    {
+                        "type": "mob",
+                        "subtype": "deer",
+                        "x": 900,
+                        "y": 400,
+                        "width": 40,
+                        "height": 45,
+                        "collision": true,
+                        "health": 25,
+                        "maxHealth": 25,
+                        "damage": 0,
+                        "speed": 4,
+                        "id": "mob-5"
                     }
                 ]
             };
@@ -132,6 +203,11 @@ class MapLoader {
         element.style.width = `${obj.width}px`;
         element.style.height = `${obj.height}px`;
         
+        // Store object data for easy access
+        if (obj.id) {
+            element.id = obj.id;
+        }
+        
         // Additional attributes based on object type
         switch (obj.type) {
             case 'building':
@@ -159,6 +235,29 @@ class MapLoader {
                 
             case 'grass':
                 if (obj.color) element.style.backgroundColor = obj.color;
+                break;
+                
+            case 'mob':
+                // Add subtype for specific animal appearance
+                if (obj.subtype) {
+                    element.classList.add(obj.subtype);
+                }
+                
+                // Store mob data as attributes
+                element.dataset.health = obj.health;
+                element.dataset.maxHealth = obj.maxHealth;
+                element.dataset.damage = obj.damage;
+                element.dataset.speed = obj.speed;
+                
+                // Set the health bar
+                element.style.setProperty('--health-percent', `${(obj.health / obj.maxHealth) * 100}%`);
+                element.style.setProperty('--health-color', '#27AE60');
+                
+                // Create health bar element as a pseudo-element using transform
+                element.style.setProperty('--health-scale', obj.health / obj.maxHealth);
+                
+                // Show mob type as text
+                element.textContent = obj.subtype.charAt(0).toUpperCase();
                 break;
         }
         

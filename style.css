@@ -65,12 +65,18 @@ body {
 .character::after {
     content: '';
     position: absolute;
-    bottom: 10px;
-    left: 14px;
-    width: 12px;
-    height: 6px;
-    background-color: #2980b9;
-    border-radius: 50%;
+    width: 6px;
+    height: 22px;
+    background-color: #A9A9A9;
+    border: 1px solid #696969;
+    border-radius: 1px;
+    z-index: 101;
+    /* Position will be controlled by CSS variables set in JavaScript */
+    top: var(--sword-top, -15px);
+    right: var(--sword-right, 16px);
+    transform-origin: bottom center;
+    transform: rotate(var(--sword-rotation, 0deg));
+    transition: all 0.2s ease;
 }
 
 /* Map Objects */
@@ -144,4 +150,134 @@ body {
     background-color: rgba(107, 187, 54, 0.5);
     border-radius: 40%;
     z-index: 3;
+}
+
+/* Mobs (Animals) */
+.mob {
+    border-radius: 50%;
+    z-index: 10;
+    transition: all 0.2s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+    color: white;
+    text-shadow: 0 0 2px black;
+    overflow: visible;
+}
+
+.mob::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    bottom: -10px;
+    left: 0;
+    background-color: rgba(255, 0, 0, 0.7);
+    border-radius: 3px;
+    transform-origin: left;
+    transform: scaleX(1);
+    transition: transform 0.3s ease;
+}
+
+.mob.rabbit {
+    background-color: #E8E8E8;
+    border: 2px solid #D0D0D0;
+}
+
+.mob.fox {
+    background-color: #FF8C00;
+    border: 2px solid #CD853F;
+}
+
+.mob.boar {
+    background-color: #8B4513;
+    border: 2px solid #4B2508;
+}
+
+.mob.wolf {
+    background-color: #808080;
+    border: 2px solid #504A4B;
+}
+
+.mob.deer {
+    background-color: #CD853F;
+    border: 2px solid #8B5A2B;
+}
+
+.mob.damaged {
+    animation: damage-flash 0.3s;
+}
+
+.mob.dead {
+    opacity: 0.5;
+    transform: rotate(90deg);
+    z-index: 3;
+}
+
+@keyframes damage-flash {
+    0% { background-color: red; }
+    100% { background-color: inherit; }
+}
+
+/* Sword attack effect */
+.attack-area {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    z-index: 50;
+    animation: sword-slash 0.3s ease-out;
+}
+
+@keyframes sword-slash {
+    0% { 
+        transform: scale(0.2);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% { 
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Player weapon */
+.character::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 22px;
+    background-color: #A9A9A9;
+    border: 1px solid #696969;
+    border-radius: 1px;
+    z-index: 101;
+    /* Default position - will be updated based on player direction */
+    top: -15px;
+    right: 16px;
+    transform-origin: bottom center;
+    transform: rotate(0deg);
+    transition: all 0.2s ease;
+}
+
+/* Player health bar */
+.health-bar {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: #E74C3C;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    height: 100%;
+    background-color: #27AE60;
+    width: 100%;
+    transition: width 0.3s ease;
 }

@@ -10,7 +10,11 @@
     <div class="game-container">
         <div class="viewport">
             <div class="map" id="game-map">
-                <div id="player" class="character"></div>
+                <div id="player" class="character">
+                    <div class="health-bar">
+                        <div class="health-bar-fill"></div>
+                    </div>
+                </div>
                 <!-- Map objects will be loaded dynamically -->
             </div>
         </div>
@@ -19,11 +23,14 @@
     <!-- Add debug info panel for development -->
     <div id="debug-panel" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 10px; font-family: monospace; z-index: 1000;">
         <div>Player Position: <span id="debug-player-pos">0,0</span></div>
-        <div>Controls: Arrows or WASD to move, Click to teleport</div>
+        <div>Player Direction: <span id="debug-player-dir">up</span></div>
+        <div>Health: <span id="debug-player-health">100/100</span></div>
+        <div>Controls: Arrows/WASD to move, Space to attack</div>
         <button onclick="document.getElementById('debug-panel').style.display='none'">Hide</button>
     </div>
     
     <script src="map-loader.js"></script>
+    <script src="combat.js"></script>
     <script src="game.js"></script>
 </body>
 </html>

@@ -22,10 +22,14 @@ async function initGame() {
     // Ensure we have valid coordinates by forcing a default if not available
     let playerX = (startPosition && typeof startPosition.x === 'number') ? startPosition.x : 750;
     let playerY = (startPosition && typeof startPosition.y === 'number') ? startPosition.y : 750;
+    let playerDirection = 'down'; // Initial direction
     
     console.log("Raw start position:", JSON.stringify(startPosition));
     console.log("Starting player position:", playerX, playerY);
     console.log("Map dimensions:", JSON.stringify(mapDimensions));
+    
+    // Initialize combat system
+    window.combatSystem.init(player, map);
     
     // Movement speed
     const speed = 5;
@@ -70,6 +74,12 @@ async function initGame() {
         
         // Check collision with each object that has collision
         for (const obj of collisionObjects) {
+            // Skip dead mobs (they shouldn't block movement)
+            const element = document.getElementById(obj.id);
+            if (element && element.classList.contains('dead')) {
+                continue;
+            }
+            
             // Simple AABB collision detection
             if (
                 playerHitbox.x < obj.x + obj.width &&
@@ -82,6 +92,21 @@ async function initGame() {
         }
         
         return false; // No collision
+    }
+    
+    // Update player direction based on movement
+    function updatePlayerDirection(dirX, dirY) {
+        // Determine the dominant direction
+        if (Math.abs(dirX) > Math.abs(dirY)) {
+            // Moving primarily horizontally
+            playerDirection = dirX > 0 ? 'right' : 'left';
+        } else if (Math.abs(dirY) > 0) {
+            // Moving primarily vertically
+            playerDirection = dirY > 0 ? 'down' : 'up';
+        }
+        
+        // Update combat system with new direction
+        window.combatSystem.updatePlayerSwordPosition(playerDirection);
     }
     
     // Key event listeners
@@ -116,6 +141,14 @@ async function initGame() {
             player.style.left = `${playerX}px`;
             player.style.top = `${playerY}px`;
             
+            // Update debug panel
+            document.getElementById('debug-player-pos').textContent = `${Math.round(playerX)},${Math.round(playerY)}`;
+            
+            // Update direction
+            const dirX = clickX - playerX;
+            const dirY = clickY - playerY;
+            updatePlayerDirection(dirX, dirY);
+            
             // Update map position to center the viewport on the player
             updateMapPosition();
         }
@@ -125,22 +158,33 @@ async function initGame() {
     function gameLoop() {
         let newX = playerX;
         let newY = playerY;
+        let dirX = 0;
+        let dirY = 0;
         
         // Calculate new position based on keys pressed
         if (keys.ArrowUp || keys.w) {
             newY -= speed;
+            dirY = -1;
         }
         
         if (keys.ArrowDown || keys.s) {
             newY += speed;
+            dirY = 1;
         }
         
         if (keys.ArrowLeft || keys.a) {
             newX -= speed;
+            dirX = -1;
         }
         
         if (keys.ArrowRight || keys.d) {
             newX += speed;
+            dirX = 1;
+        }
+        
+        // If player is moving, update direction
+        if (dirX !== 0 || dirY !== 0) {
+            updatePlayerDirection(dirX, dirY);
         }
         
         // Check map boundaries
@@ -179,6 +223,9 @@ async function initGame() {
     
     // Force player to be visible by explicitly setting display style
     player.style.display = 'block';
+    
+    // Set initial player direction
+    window.combatSystem.updatePlayerSwordPosition(playerDirection);
     
     updateMapPosition();
     
