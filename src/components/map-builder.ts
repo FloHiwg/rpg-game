@@ -7,8 +7,7 @@ import {
   BuildingType,
   MobType,
   Position,
-  ObjectTemplate,
-  MapSettings
+  ObjectTemplate
 } from '../types/game-types';
 
 export class MapBuilder {
