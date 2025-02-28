@@ -1,4 +1,4 @@
-import { Direction, Dimensions, Position, PlayerState, CollisionObject } from '../types/game-types';
+import { Direction, Dimensions, Position, PlayerState, CollisionObject, MapData } from '../types/game-types';
 import { MapLoader } from './map-loader';
 import { CombatSystem } from './combat-system';
 
@@ -38,6 +38,42 @@ export class GameEngine {
   constructor(mapLoader: MapLoader, combatSystem: CombatSystem) {
     this.mapLoader = mapLoader;
     this.combatSystem = combatSystem;
+  }
+  
+  public loadMapData(mapData: MapData): void {
+    // Stop any existing game loop
+    this.stopGameLoop();
+    
+    // Reset the loader with the new map data
+    this.mapLoader.setMapData(mapData);
+    
+    // Re-render the map
+    this.mapLoader.renderMap();
+    
+    // Update map dimensions
+    this.mapDimensions = this.mapLoader.getMapDimensions();
+    
+    // Update player position to start position
+    const startPosition = this.mapLoader.getStartPosition();
+    this.playerState.x = startPosition.x;
+    this.playerState.y = startPosition.y;
+    
+    if (this.player) {
+      this.player.style.left = `${this.playerState.x}px`;
+      this.player.style.top = `${this.playerState.y}px`;
+      
+      // Update debug panel
+      const debugPosElement = document.getElementById('debug-player-pos');
+      if (debugPosElement) {
+        debugPosElement.textContent = `${Math.round(this.playerState.x)},${Math.round(this.playerState.y)}`;
+      }
+    }
+    
+    // Update map position
+    this.updateMapPosition();
+    
+    // Restart game loop
+    this.startGameLoop();
   }
 
   public async init(): Promise<void> {
@@ -242,7 +278,7 @@ export class GameEngine {
     this.animationFrameId = requestAnimationFrame(() => this.gameLoop());
   }
 
-  private startGameLoop(): void {
+  public startGameLoop(): void {
     if (!this.animationFrameId) {
       this.gameLoop();
     }

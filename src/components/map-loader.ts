@@ -3,6 +3,10 @@ import { MapData, MapObject, CollisionObject, Position, Dimensions } from '../ty
 export class MapLoader {
   private mapData: MapData | null = null;
   private collisionObjects: CollisionObject[] = [];
+  
+  public setMapData(mapData: MapData): void {
+    this.mapData = mapData;
+  }
 
   constructor() {}
 

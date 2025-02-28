@@ -67,3 +67,45 @@ export interface PlayerState {
   maxHealth: number;
   money: number;
 }
+
+// Map Builder Types
+export type EditorMode = 'select' | 'add' | 'delete' | 'move';
+export type ObjectType = 'building' | 'path' | 'tree' | 'mob' | 'coin';
+export type BuildingType = 'house' | 'shop';
+export type MobType = 'rabbit' | 'fox' | 'boar' | 'wolf' | 'deer';
+
+export interface ObjectTemplate {
+  type: ObjectType;
+  subtype?: BuildingType | MobType;
+  width: number;
+  height: number;
+  collision: boolean;
+  color?: string;
+  borderColor?: string;
+  roofColor?: string;
+  health?: number;
+  maxHealth?: number;
+  damage?: number;
+  speed?: number;
+  money?: number;
+  value?: number;
+}
+
+export interface MapSettings {
+  mapWidth: number;
+  mapHeight: number;
+  tileSize: number;
+  background: string;
+}
+
+export interface EditorState {
+  mode: EditorMode;
+  selectedObjectType: ObjectType;
+  selectedSubtype?: BuildingType | MobType;
+  selectedObject: MapObject | null;
+  grid: boolean;
+  snapToGrid: boolean;
+  gridSize: number;
+  templates: Record<string, ObjectTemplate>;
+  clipboard: MapObject | null;
+}
