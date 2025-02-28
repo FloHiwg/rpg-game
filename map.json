@@ -1,0 +1,229 @@
+{
+  "mapWidth": 1500,
+  "mapHeight": 1500,
+  "tileSize": 50,
+  "background": "#7caa2d",
+  "startPosition": {
+    "x": 750,
+    "y": 750
+  },
+  "objects": [
+    {
+      "type": "building",
+      "subtype": "house",
+      "x": 300,
+      "y": 500,
+      "width": 100,
+      "height": 80,
+      "collision": true,
+      "color": "#8B4513",
+      "borderColor": "#5D2906",
+      "roofColor": "#A52A2A"
+    },
+    {
+      "type": "building",
+      "subtype": "house",
+      "x": 1000,
+      "y": 800,
+      "width": 120,
+      "height": 90,
+      "collision": true,
+      "color": "#8B4513",
+      "borderColor": "#5D2906",
+      "roofColor": "#A52A2A"
+    },
+    {
+      "type": "building",
+      "subtype": "shop",
+      "x": 600,
+      "y": 400,
+      "width": 140,
+      "height": 100,
+      "collision": true,
+      "color": "#6A5ACD",
+      "borderColor": "#483D8B",
+      "roofColor": "#9370DB"
+    },
+    {
+      "type": "building",
+      "subtype": "inn",
+      "x": 800,
+      "y": 1100,
+      "width": 160,
+      "height": 120,
+      "collision": true,
+      "color": "#CD853F",
+      "borderColor": "#8B5A2B",
+      "roofColor": "#DEB887"
+    },
+    {
+      "type": "building",
+      "subtype": "blacksmith",
+      "x": 1200,
+      "y": 500,
+      "width": 130,
+      "height": 110,
+      "collision": true,
+      "color": "#708090",
+      "borderColor": "#2F4F4F",
+      "roofColor": "#A9A9A9"
+    },
+    {
+      "type": "path",
+      "x": 750,
+      "y": 750,
+      "width": 500,
+      "height": 50,
+      "collision": false,
+      "color": "#D2B48C"
+    },
+    {
+      "type": "path",
+      "x": 750,
+      "y": 1000,
+      "width": 50,
+      "height": 300,
+      "collision": false,
+      "color": "#D2B48C"
+    },
+    {
+      "type": "path",
+      "x": 750,
+      "y": 500,
+      "width": 50,
+      "height": 300,
+      "collision": false,
+      "color": "#D2B48C"
+    },
+    {
+      "type": "path",
+      "x": 1000,
+      "y": 600,
+      "width": 300,
+      "height": 50,
+      "collision": false,
+      "color": "#D2B48C"
+    },
+    {
+      "type": "path",
+      "x": 500,
+      "y": 600,
+      "width": 300,
+      "height": 50,
+      "collision": false,
+      "color": "#D2B48C"
+    },
+    {
+      "type": "tree",
+      "x": 200,
+      "y": 200,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 250,
+      "y": 280,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 1300,
+      "y": 200,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 1250,
+      "y": 280,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 1300,
+      "y": 1300,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 1200,
+      "y": 1250,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 200,
+      "y": 1300,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "tree",
+      "x": 300,
+      "y": 1200,
+      "width": 60,
+      "height": 60,
+      "collision": true
+    },
+    {
+      "type": "stone",
+      "x": 400,
+      "y": 800,
+      "width": 40,
+      "height": 40,
+      "collision": true
+    },
+    {
+      "type": "stone",
+      "x": 450,
+      "y": 830,
+      "width": 30,
+      "height": 30,
+      "collision": true
+    },
+    {
+      "type": "stone",
+      "x": 1100,
+      "y": 300,
+      "width": 40,
+      "height": 40,
+      "collision": true
+    },
+    {
+      "type": "stone",
+      "x": 1130,
+      "y": 350,
+      "width": 25,
+      "height": 25,
+      "collision": true
+    },
+    {
+      "type": "grass",
+      "x": 500,
+      "y": 1200,
+      "width": 200,
+      "height": 200,
+      "collision": false
+    },
+    {
+      "type": "grass",
+      "x": 1100,
+      "y": 900,
+      "width": 200,
+      "height": 150,
+      "collision": false
+    }
+  ]
+}
