@@ -59,6 +59,23 @@ export interface CollisionObject {
   id?: string;
 }
 
+export type ItemType = 'weapon' | 'armor' | 'consumable';
+export type ItemSlot = 'weapon' | 'head' | 'body' | 'legs' | 'none';
+export type WeaponType = 'sword' | 'axe' | 'bow';
+export type ArmorType = 'helmet' | 'chestplate' | 'leggings';
+
+export interface Item {
+  id: string;
+  name: string;
+  type: ItemType;
+  slot: ItemSlot;
+  subtype?: WeaponType | ArmorType;
+  damage?: number;
+  defense?: number;
+  value: number;
+  description: string;
+}
+
 export interface PlayerState {
   x: number;
   y: number;
@@ -66,12 +83,29 @@ export interface PlayerState {
   health: number;
   maxHealth: number;
   money: number;
+  inventory: Item[];
+  equipped: {
+    weapon: Item | null;
+    head: Item | null;
+    body: Item | null;
+    legs: Item | null;
+  };
+  damage: number;
+  defense: number;
 }
 
 // Map Builder Types
 export type EditorMode = 'select' | 'add' | 'delete' | 'move';
 export type ObjectType = 'building' | 'path' | 'tree' | 'mob' | 'coin';
 export type BuildingType = 'house' | 'shop';
+
+export interface Shop {
+  id: string;
+  name: string;
+  inventory: Item[];
+  buyMultiplier: number; // Price multiplier when player buys (e.g., 1.5 means 50% markup)
+  sellMultiplier: number; // Price multiplier when player sells (e.g., 0.5 means half price)
+}
 export type MobType = 'rabbit' | 'fox' | 'boar' | 'wolf' | 'deer';
 
 export interface ObjectTemplate {

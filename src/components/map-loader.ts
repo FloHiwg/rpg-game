@@ -109,6 +109,26 @@ export class MapLoader {
         // Add subtype if available
         if (obj.subtype) {
           element.classList.add(obj.subtype);
+          
+          // Add interaction hint for shops
+          if (obj.subtype === 'shop') {
+            // Add a small hint element above the shop
+            const hint = document.createElement('div');
+            hint.className = 'interaction-hint';
+            hint.textContent = 'Press E to shop';
+            hint.style.position = 'absolute';
+            hint.style.bottom = `${obj.height + 15}px`;
+            hint.style.left = '50%';
+            hint.style.transform = 'translateX(-50%)';
+            hint.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            hint.style.color = 'white';
+            hint.style.padding = '3px 8px';
+            hint.style.borderRadius = '3px';
+            hint.style.fontSize = '12px';
+            hint.style.whiteSpace = 'nowrap';
+            hint.style.zIndex = '5';
+            element.appendChild(hint);
+          }
         }
         break;
         

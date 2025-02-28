@@ -42,7 +42,21 @@
             "collision": true,
             "color": "#6A5ACD",
             "borderColor": "#483D8B",
-            "roofColor": "#9370DB"
+            "roofColor": "#9370DB",
+            "id": "blacksmith-shop"
+        },
+        {
+            "type": "building",
+            "subtype": "shop",
+            "x": 900,
+            "y": 500,
+            "width": 120,
+            "height": 80,
+            "collision": true,
+            "color": "#7B3F00",
+            "borderColor": "#5B2F00",
+            "roofColor": "#8B4500",
+            "id": "general-store"
         },
         {
             "type": "path",

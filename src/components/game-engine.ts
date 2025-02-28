@@ -1,6 +1,7 @@
-import { Direction, Dimensions, Position, PlayerState, CollisionObject, MapData } from '../types/game-types';
+import { Direction, Dimensions, Position, PlayerState, CollisionObject, MapData, Item } from '../types/game-types';
 import { MapLoader } from './map-loader';
 import { CombatSystem } from './combat-system';
+import { InventorySystem } from './inventory-system';
 
 export class GameEngine {
   private player: HTMLElement | null = null;
@@ -10,6 +11,7 @@ export class GameEngine {
   
   private mapLoader: MapLoader;
   private combatSystem: CombatSystem;
+  private inventorySystem: InventorySystem;
   
   private playerState: PlayerState = {
     x: 750,
@@ -17,7 +19,16 @@ export class GameEngine {
     direction: 'down',
     health: 100,
     maxHealth: 100,
-    money: 0
+    money: 0,
+    inventory: [],
+    equipped: {
+      weapon: null,
+      head: null,
+      body: null,
+      legs: null
+    },
+    damage: 5, // Base damage
+    defense: 0 // Base defense
   };
   
   private mapDimensions: Dimensions = { width: 0, height: 0 };
@@ -35,9 +46,10 @@ export class GameEngine {
   
   private animationFrameId: number | null = null;
 
-  constructor(mapLoader: MapLoader, combatSystem: CombatSystem) {
+  constructor(mapLoader: MapLoader, combatSystem: CombatSystem, inventorySystem: InventorySystem) {
     this.mapLoader = mapLoader;
     this.combatSystem = combatSystem;
+    this.inventorySystem = inventorySystem;
   }
   
   public loadMapData(mapData: MapData): void {
@@ -106,7 +118,10 @@ export class GameEngine {
     console.log("Map dimensions:", JSON.stringify(this.mapDimensions));
     
     // Initialize combat system
-    this.combatSystem.init(this.player, this.map);
+    this.combatSystem.init(this.player, this.map, this.playerState);
+    
+    // Initialize inventory system
+    this.inventorySystem.init(this.playerState);
     
     // Set up event listeners
     this.setupEventListeners();
@@ -137,9 +152,22 @@ export class GameEngine {
   private setupEventListeners(): void {
     // Key event listeners
     window.addEventListener('keydown', (e: KeyboardEvent) => {
+      // Movement keys
       if (e.key in this.keys) {
         this.keys[e.key] = true;
         e.preventDefault(); // Prevent scrolling with arrow keys
+      }
+      
+      // Toggle inventory with 'i' key
+      if (e.key === 'i') {
+        this.inventorySystem.toggleInventoryPanel();
+        e.preventDefault();
+      }
+      
+      // Interact with objects (like shops) with 'e' key
+      if (e.key === 'e') {
+        this.checkForInteraction();
+        e.preventDefault();
       }
     });
     
@@ -148,6 +176,44 @@ export class GameEngine {
         this.keys[e.key] = false;
       }
     });
+  }
+  
+  private checkForInteraction(): void {
+    if (!this.player) return;
+    
+    // Get player position
+    const playerX = this.playerState.x;
+    const playerY = this.playerState.y;
+    
+    // Get all shop buildings
+    const shops = document.querySelectorAll('.map-object.building.shop');
+    
+    // Check each shop for proximity
+    let nearestShop: HTMLElement | null = null;
+    let minDistance = 100; // Interact within 100px
+    
+    shops.forEach((shop) => {
+      const shopElement = shop as HTMLElement;
+      const shopX = parseInt(shopElement.style.left || '0');
+      const shopY = parseInt(shopElement.style.top || '0');
+      
+      // Calculate distance between player and shop
+      const distance = Math.sqrt(
+        Math.pow(playerX - shopX, 2) + Math.pow(playerY - shopY, 2)
+      );
+      
+      // If player is close enough and closer than previously found shop
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestShop = shopElement;
+      }
+    });
+    
+    // If a shop is found in range, open it
+    if (nearestShop) {
+      const shopId = nearestShop.id;
+      this.inventorySystem.openShop(shopId);
+    }
   }
 
   private updateMapPosition(): void {
@@ -180,7 +246,10 @@ export class GameEngine {
     for (const obj of collisionObjects) {
       // Skip dead mobs (they shouldn't block movement)
       const element = obj.id ? document.getElementById(obj.id) : null;
-      if (element && element.classList.contains('dead')) {
+      if (element && (
+          element.classList.contains('dead') || 
+          (element.classList.contains('coin') && element.classList.contains('collecting'))
+      )) {
         continue;
       }
       
@@ -265,6 +334,18 @@ export class GameEngine {
       const debugPosElement = document.getElementById('debug-player-pos');
       if (debugPosElement) {
         debugPosElement.textContent = `${Math.round(this.playerState.x)},${Math.round(this.playerState.y)}`;
+      }
+      
+      // Update damage and defense in debug panel
+      const debugDamageElement = document.getElementById('debug-player-damage');
+      const debugDefenseElement = document.getElementById('debug-player-defense');
+      
+      if (debugDamageElement) {
+        debugDamageElement.textContent = this.playerState.damage.toString();
+      }
+      
+      if (debugDefenseElement) {
+        debugDefenseElement.textContent = this.playerState.defense.toString();
       }
       
       // Update map position to center the viewport on the player

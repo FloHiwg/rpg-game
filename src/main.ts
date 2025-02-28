@@ -1,13 +1,15 @@
 import './styles.css';
 import { MapLoader } from './components/map-loader';
 import { CombatSystem } from './components/combat-system';
+import { InventorySystem } from './components/inventory-system';
 import { GameEngine } from './components/game-engine';
 import { MapBuilder } from './components/map-builder';
 
 // Initialize components
 const mapLoader = new MapLoader();
 const combatSystem = new CombatSystem();
-const gameEngine = new GameEngine(mapLoader, combatSystem);
+const inventorySystem = new InventorySystem();
+const gameEngine = new GameEngine(mapLoader, combatSystem, inventorySystem);
 const mapBuilder = new MapBuilder();
 
 // Wait for DOM to be fully loaded
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   (window as any).game = {
     mapLoader,
     combatSystem,
+    inventorySystem,
     gameEngine,
     mapBuilder
   };

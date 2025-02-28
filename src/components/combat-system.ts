@@ -1,20 +1,19 @@
-import { Direction } from '../types/game-types';
+import { Direction, PlayerState, Item } from '../types/game-types';
 
 export class CombatSystem {
   private player: HTMLElement | null = null;
   private map: HTMLElement | null = null;
-  private playerHealth: number = 100;
-  private playerMaxHealth: number = 100;
-  private playerMoney: number = 0;
+  private playerState: PlayerState | null = null;
   private swordAttackRange: number = 50;
   private attackCooldown: boolean = false;
   private attackCooldownTime: number = 500; // milliseconds
 
   constructor() {}
 
-  public init(player: HTMLElement, map: HTMLElement): void {
+  public init(player: HTMLElement, map: HTMLElement, playerState: PlayerState): void {
     this.player = player;
     this.map = map;
+    this.playerState = playerState;
     this.setupEventListeners();
     this.updateHealthBar();
     this.updateMoneyDisplay();
@@ -157,7 +156,8 @@ export class CombatSystem {
     const maxHealth = parseInt(enemy.dataset.maxHealth || '1');
     
     // Reduce health by player damage
-    health -= 5; // Player damage amount
+    const playerDamage = this.playerState ? this.playerState.damage : 5;
+    health -= playerDamage;
     
     // Update health in data attribute
     enemy.dataset.health = health.toString();
@@ -212,11 +212,13 @@ export class CombatSystem {
   }
 
   private collectCoin(coin: HTMLElement): void {
+    if (!this.playerState) return;
+    
     // Get coin value
     const value = parseInt(coin.dataset.value || '1');
     
     // Add to player money
-    this.playerMoney += value;
+    this.playerState.money += value;
     
     // Update money display
     this.updateMoneyDisplay();
@@ -254,40 +256,50 @@ export class CombatSystem {
   }
 
   private updateMoneyDisplay(): void {
+    if (!this.playerState) return;
+    
     // Update money count
     const moneyElement = document.getElementById('money-count');
     if (moneyElement) {
-      moneyElement.textContent = this.playerMoney.toString();
+      moneyElement.textContent = this.playerState.money.toString();
     }
     
     // Update debug panel
     const debugMoneyElement = document.getElementById('debug-player-money');
     if (debugMoneyElement) {
-      debugMoneyElement.textContent = this.playerMoney.toString();
+      debugMoneyElement.textContent = this.playerState.money.toString();
     }
   }
 
   private updateHealthBar(): void {
-    if (!this.player) return;
+    if (!this.player || !this.playerState) return;
 
     // Update health bar
     const healthBar = this.player.querySelector('.health-bar-fill') as HTMLElement;
     if (healthBar) {
-      healthBar.style.width = `${(this.playerHealth / this.playerMaxHealth) * 100}%`;
+      healthBar.style.width = `${(this.playerState.health / this.playerState.maxHealth) * 100}%`;
     }
     
     // Update debug panel
     const debugHealthElement = document.getElementById('debug-player-health');
     if (debugHealthElement) {
-      debugHealthElement.textContent = `${this.playerHealth}/${this.playerMaxHealth}`;
+      debugHealthElement.textContent = `${this.playerState.health}/${this.playerState.maxHealth}`;
     }
   }
 
   public getPlayerMoney(): number {
-    return this.playerMoney;
+    return this.playerState ? this.playerState.money : 0;
   }
 
   public getPlayerHealth(): number {
-    return this.playerHealth;
+    return this.playerState ? this.playerState.health : 0;
+  }
+  
+  public getPlayerDamage(): number {
+    return this.playerState ? this.playerState.damage : 5;
+  }
+  
+  public getPlayerDefense(): number {
+    return this.playerState ? this.playerState.defense : 0;
   }
 }
