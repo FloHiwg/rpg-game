@@ -1,6 +1,6 @@
 # 2D RPG Game
 
-A 2D top-down RPG game built with TypeScript, featuring an integrated map builder.
+A 2D top-down RPG game built with TypeScript and Vite, featuring an integrated map builder.
 
 ## Game Features
 
@@ -24,14 +24,14 @@ A 2D top-down RPG game built with TypeScript, featuring an integrated map builde
 ## Technologies Used
 
 - TypeScript
-- Webpack
+- Vite
 - HTML5 & CSS3
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - npm or yarn
 
 ### Installation
@@ -49,7 +49,7 @@ Run the development server:
 npm run dev
 ```
 
-The game will be available at http://localhost:9000.
+The game will be available at http://localhost:3000.
 
 ### Building for Production
 
@@ -59,6 +59,11 @@ npm run build
 ```
 
 The build files will be located in the `dist` directory.
+
+To preview the production build:
+```
+npm run preview
+```
 
 ## Gameplay Instructions
 
@@ -79,11 +84,11 @@ The build files will be located in the `dist` directory.
 
 ## Game Structure
 
-- `src/index.ts` - Entry point
+- `src/main.ts` - Entry point
 - `src/components/` - Game components and systems
   - `game-engine.ts` - Core game loop and mechanics
   - `map-loader.ts` - Map loading and rendering
   - `combat-system.ts` - Combat and money mechanics
   - `map-builder.ts` - Map editing functionality
 - `src/types/` - TypeScript interfaces and types
-- `src/map.json` - Default map configuration
+- `public/map.json` - Default map configuration

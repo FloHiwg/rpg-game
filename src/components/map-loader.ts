@@ -10,7 +10,7 @@ export class MapLoader {
 
   constructor() {}
 
-  public async loadMap(mapFile: string = 'map.json'): Promise<MapData | null> {
+  public async loadMap(mapFile: string = '/map.json'): Promise<MapData | null> {
     try {
       // Fetch map data from the JSON file
       const response = await fetch(mapFile);
