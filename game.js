@@ -12,15 +12,20 @@ async function initGame() {
     
     // Load map data
     await window.mapLoader.loadMap();
+    
+    // Add a small delay to ensure map data is fully processed
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     const mapDimensions = window.mapLoader.getMapDimensions();
     const startPosition = window.mapLoader.getStartPosition();
     
-    // Player position (from map data)
-    let playerX = startPosition.x;
-    let playerY = startPosition.y;
+    // Ensure we have valid coordinates by forcing a default if not available
+    let playerX = (startPosition && typeof startPosition.x === 'number') ? startPosition.x : 750;
+    let playerY = (startPosition && typeof startPosition.y === 'number') ? startPosition.y : 750;
     
+    console.log("Raw start position:", JSON.stringify(startPosition));
     console.log("Starting player position:", playerX, playerY);
-    console.log("Map dimensions:", mapDimensions);
+    console.log("Map dimensions:", JSON.stringify(mapDimensions));
     
     // Movement speed
     const speed = 5;
@@ -153,6 +158,9 @@ async function initGame() {
             player.style.left = `${playerX}px`;
             player.style.top = `${playerY}px`;
             
+            // Update debug panel
+            document.getElementById('debug-player-pos').textContent = `${Math.round(playerX)},${Math.round(playerY)}`;
+            
             // Update map position to center the viewport on the player
             updateMapPosition();
         }
@@ -165,6 +173,13 @@ async function initGame() {
     console.log("Setting initial player position to:", playerX, playerY);
     player.style.left = `${playerX}px`;
     player.style.top = `${playerY}px`;
+    
+    // Update debug panel with initial position
+    document.getElementById('debug-player-pos').textContent = `${Math.round(playerX)},${Math.round(playerY)}`;
+    
+    // Force player to be visible by explicitly setting display style
+    player.style.display = 'block';
+    
     updateMapPosition();
     
     // Start the game loop
