@@ -69,7 +69,7 @@ export class CombatSystem {
         swordAttack.style.height = '50px';
         break;
       case 'down':
-        left = parseInt(this.player.style.left || '0');
+        left = parseInt(this.player.style.left || '0') - 15;
         top = parseInt(this.player.style.top || '0') + 20;
         swordAttack.style.width = '30px';
         swordAttack.style.height = '50px';
@@ -82,7 +82,7 @@ export class CombatSystem {
         break;
       case 'right':
         left = parseInt(this.player.style.left || '0') + 20;
-        top = parseInt(this.player.style.top || '0');
+        top = parseInt(this.player.style.top || '0') - 15;
         swordAttack.style.width = '50px';
         swordAttack.style.height = '30px';
         break;

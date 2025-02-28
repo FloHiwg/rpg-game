@@ -1,4 +1,4 @@
-import { Direction, Dimensions, Position, PlayerState, CollisionObject, MapData, Item } from '../types/game-types';
+import { Dimensions, PlayerState, MapData } from '../types/game-types';
 import { MapLoader } from './map-loader';
 import { CombatSystem } from './combat-system';
 import { InventorySystem } from './inventory-system';
@@ -211,7 +211,7 @@ export class GameEngine {
     
     // If a shop is found in range, open it
     if (nearestShop) {
-      const shopId = nearestShop.id;
+      const shopId = (nearestShop as HTMLElement).id;
       this.inventorySystem.openShop(shopId);
     }
   }
